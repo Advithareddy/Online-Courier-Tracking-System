@@ -175,14 +175,15 @@ The application will run locally on your computer.
 ## 🔄 Application Workflow
 
 1. A user registers and logs in.
-2. The user opens the dashboard.
+2. The user opens the User Dashboard.
 3. The user books a courier by entering the required shipment details.
 4. The system generates a unique tracking ID.
-5. The user enters the tracking ID to check courier information and status.
-6. The administrator views courier bookings and updates delivery statuses.
-7. GPS coordinates can be displayed when location data is available.
-
----
+5. The administrator manages courier bookings through the Admin Dashboard.
+6. The driver views assigned deliveries through the Driver Dashboard, if driver assignment is enabled.
+7. The driver collects the shipment and updates its delivery status.
+8. GPS coordinates can be shared when location access is enabled.
+9. The user tracks the courier using the tracking ID.
+10. The delivery status is updated until the courier reaches its destination.
 
 ## 🎯 Project Objectives
 
