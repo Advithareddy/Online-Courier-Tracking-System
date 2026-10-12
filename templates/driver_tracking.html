@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Live Courier Tracking</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: white;
+            border-radius: 18px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .header .icon {
+            font-size: 50px;
+            margin-bottom: 10px;
+        }
+
+        .header h1 {
+            color: #1e3c72;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #777;
+            font-size: 14px;
+        }
+
+        .tracking-box {
+            background: #f4f6f9;
+            padding: 18px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tracking-box label {
+            display: block;
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 8px;
+        }
+
+        .tracking-box input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            font-size: 16px;
+            text-transform: uppercase;
+        }
+
+        .tracking-box input:focus {
+            outline: none;
+            border-color: #2a5298;
+        }
+
+        .start-btn {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 8px;
+            background: #27ae60;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .start-btn:hover {
+            background: #219150;
+        }
+
+        .stop-btn {
+            background: #e74c3c;
+            margin-top: 10px;
+        }
+
+        .stop-btn:hover {
+            background: #c0392b;
+        }
+
+        .status-box {
+            margin-top: 25px;
+            padding: 18px;
+            border-radius: 10px;
+            background: #f8f9fa;
+            border-left: 5px solid #2a5298;
+        }
+
+        .status-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .status {
+            color: #777;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .location {
+            margin-top: 15px;
+            padding: 15px;
+            background: #eaf2ff;
+            border-radius: 8px;
+            color: #1e3c72;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .location strong {
+            color: #111;
+        }
+
+        .map-btn {
+            display: none;
+            margin-top: 15px;
+            width: 100%;
+            text-align: center;
+            padding: 11px;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 7px;
+            font-weight: bold;
+        }
+
+        .map-btn:hover {
+            background: #2980b9;
+        }
+
+        .info {
+            margin-top: 20px;
+            padding: 12px;
+            background: #fff3cd;
+            color: #856404;
+            border-radius: 7px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .back-btn {
+            display: block;
+            margin-top: 15px;
+            text-align: center;
+            padding: 11px;
+            background: #6c757d;
+            color: white;
+            text-decoration: none;
+            border-radius: 7px;
+            font-weight: bold;
+        }
+
+        .back-btn:hover {
+            background: #545b62;
+        }
+
+        @media (max-width: 600px) {
+
+            .container {
+                padding: 22px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- HEADER -->
+
+        <div class="header">
+
+            <div class="icon">
+                🚚
+            </div>
+
+            <h1>
+                Live Courier Tracking
+            </h1>
+
+            <p>
+                Automatically share your current GPS location
+            </p>
+
+        </div>
+
+
+        <!-- TRACKING ID -->
+
+        <div class="tracking-box">
+
+            <label for="trackingId">
+                Tracking ID
+            </label>
+
+            <input
+                type="text"
+                id="trackingId"
+                value="{{ tracking_id }}"
+                placeholder="Example: CT8A91B2F4"
+                {% if tracking_id %}
+                    readonly
+                {% endif %}
+            >
+
+        </div>
+
+
+        <!-- START BUTTON -->
+
+        <button
+            class="start-btn"
+            id="startBtn"
+            onclick="startTracking()"
+        >
+            📍 Start Live Tracking
+        </button>
+
+
+        <!-- STOP BUTTON -->
+
+        <button
+            class="start-btn stop-btn"
+            id="stopBtn"
+            onclick="stopTracking()"
+            style="display: none;"
+        >
+            🛑 Stop Live Tracking
+        </button>
+
+
+        <!-- STATUS -->
+
+        <div class="status-box">
+
+            <div class="status-title">
+                Tracking Status
+            </div>
+
+            <div
+                class="status"
+                id="status"
+            >
+                Waiting to start GPS tracking...
+            </div>
+
+
+            <!-- LOCATION -->
+
+            <div
+                class="location"
+                id="location"
+                style="display: none;"
+            >
+
+                <strong>📍 Current Location</strong>
+
+                <br>
+
+                Latitude:
+                <strong id="latitude">
+                    -
+                </strong>
+
+                <br>
+
+                Longitude:
+                <strong id="longitude">
+                    -
+                </strong>
+
+                <br>
+
+                Last Updated:
+                <strong id="lastUpdated">
+                    -
+                </strong>
+
+            </div>
+
+
+            <!-- GOOGLE MAPS -->
+
+            <a
+                id="mapBtn"
+                class="map-btn"
+                href="#"
+                target="_blank"
+            >
+                🗺️ View My Location on Google Maps
+            </a>
+
+        </div>
+
+
+        <!-- INFORMATION -->
+
+        <div class="info">
+
+            <strong>Important:</strong>
+
+            Keep this page open while the courier is moving.
+            Your phone's GPS will automatically update the courier's
+            location.
+
+        </div>
+
+
+        <!-- BACK TO DASHBOARD -->
+
+        <a
+            href="{{ url_for('driver_dashboard') }}"
+            class="back-btn"
+        >
+            ← Back to Driver Dashboard
+        </a>
+
+    </div>
+
+
+    <script>
+
+        // Store GPS watcher ID
+        let watchId = null;
+
+
+        // =====================================================
+        // START LIVE TRACKING
+        // =====================================================
+
+        function startTracking() {
+
+            const trackingId =
+                document.getElementById("trackingId").value
+                .trim()
+                .toUpperCase();
+
+
+            // Check tracking ID
+
+            if (!trackingId) {
+
+                alert("Please enter the Tracking ID.");
+
+                return;
+            }
+
+
+            // Check browser GPS support
+
+            if (!navigator.geolocation) {
+
+                alert(
+                    "GPS is not supported by this browser."
+                );
+
+                return;
+            }
+
+
+            // Update status
+
+            document.getElementById("status").innerText =
+                "Requesting GPS permission...";
+
+
+            // Start watching GPS
+
+            watchId = navigator.geolocation.watchPosition(
+
+                function(position) {
+
+                    const latitude =
+                        position.coords.latitude;
+
+                    const longitude =
+                        position.coords.longitude;
+
+
+                    // Display location
+
+                    document.getElementById("latitude")
+                        .innerText = latitude.toFixed(6);
+
+                    document.getElementById("longitude")
+                        .innerText = longitude.toFixed(6);
+
+
+                    // Current time
+
+                    const currentTime =
+                        new Date().toLocaleTimeString();
+
+
+                    document.getElementById("lastUpdated")
+                        .innerText = currentTime;
+
+
+                    // Show location box
+
+                    document.getElementById("location")
+                        .style.display = "block";
+
+
+                    // Update status
+
+                    document.getElementById("status")
+                        .innerText =
+                        "🟢 Live GPS tracking is active.";
+
+
+                    // Google Maps URL
+
+                    const mapUrl =
+                        "https://www.google.com/maps?q="
+                        + latitude
+                        + ","
+                        + longitude;
+
+
+                    const mapButton =
+                        document.getElementById("mapBtn");
+
+
+                    mapButton.href = mapUrl;
+
+                    mapButton.style.display =
+                        "block";
+
+
+                    // Send GPS location to Flask
+
+                    sendLocation(
+                        trackingId,
+                        latitude,
+                        longitude
+                    );
+
+                },
+
+
+                function(error) {
+
+                    console.log(error);
+
+                    let message =
+                        "Unable to get GPS location.";
+
+
+                    if (error.code === 1) {
+
+                        message =
+                            "GPS permission denied. Please allow location access.";
+
+                    }
+
+                    else if (error.code === 2) {
+
+                        message =
+                            "GPS location is unavailable.";
+
+                    }
+
+                    else if (error.code === 3) {
+
+                        message =
+                            "GPS request timed out.";
+
+                    }
+
+
+                    document.getElementById("status")
+                        .innerText = "🔴 " + message;
+
+                },
+
+
+                {
+                    enableHighAccuracy: true,
+                    maximumAge: 0,
+                    timeout: 10000
+                }
+
+            );
+
+
+            // Change buttons
+
+            document.getElementById("startBtn")
+                .style.display = "none";
+
+            document.getElementById("stopBtn")
+                .style.display = "block";
+
+        }
+
+
+        // =====================================================
+        // SEND LOCATION TO FLASK
+        // =====================================================
+
+        function sendLocation(
+            trackingId,
+            latitude,
+            longitude
+        ) {
+
+            fetch("/update-location", {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+
+                    tracking_id: trackingId,
+
+                    latitude: latitude,
+
+                    longitude: longitude
+
+                })
+
+            })
+
+            .then(response => {
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Server error"
+                    );
+
+                }
+
+                return response.json();
+
+            })
+
+            .then(data => {
+
+                console.log(
+                    "GPS location sent successfully:",
+                    data
+                );
+
+            })
+
+            .catch(error => {
+
+                console.error(
+                    "Error sending GPS:",
+                    error
+                );
+
+                document.getElementById("status")
+                    .innerText =
+                    "⚠️ GPS received, but server update failed.";
+
+            });
+
+        }
+
+
+        // =====================================================
+        // STOP LIVE TRACKING
+        // =====================================================
+
+        function stopTracking() {
+
+            if (watchId !== null) {
+
+                navigator.geolocation.clearWatch(
+                    watchId
+                );
+
+                watchId = null;
+
+            }
+
+
+            document.getElementById("status")
+                .innerText =
+                "🔴 Live tracking stopped.";
+
+
+            document.getElementById("startBtn")
+                .style.display = "block";
+
+
+            document.getElementById("stopBtn")
+                .style.display = "none";
+
+        }
+
+    </script>
+
+</body>
+
+</html>

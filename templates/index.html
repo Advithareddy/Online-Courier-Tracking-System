@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Online Courier Tracking System</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f7fb;
+            color: #222;
+        }
+
+        /* Navigation Bar */
+        nav {
+            background: #1e3a8a;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        nav ul li a:hover {
+            color: #93c5fd;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 75vh;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 60px 8%;
+            background: linear-gradient(135deg, #dbeafe, #eff6ff);
+        }
+
+        .hero-content {
+            width: 55%;
+        }
+
+        .hero-content h1 {
+            font-size: 48px;
+            color: #1e3a8a;
+            margin-bottom: 20px;
+        }
+
+        .hero-content p {
+            font-size: 18px;
+            line-height: 1.7;
+            color: #555;
+            margin-bottom: 30px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 14px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .primary {
+            background: #2563eb;
+            color: white;
+        }
+
+        .secondary {
+            background: white;
+            color: #2563eb;
+            border: 2px solid #2563eb;
+        }
+
+        .btn:hover {
+            opacity: 0.85;
+        }
+
+        /* Illustration */
+        .hero-image {
+            width: 35%;
+            text-align: center;
+            font-size: 120px;
+        }
+
+        /* Features */
+        .features {
+            padding: 60px 8%;
+            text-align: center;
+        }
+
+        .features h2 {
+            font-size: 32px;
+            color: #1e3a8a;
+            margin-bottom: 40px;
+        }
+
+        .feature-container {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .feature-card {
+            background: white;
+            width: 280px;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .feature-card .icon {
+            font-size: 45px;
+            margin-bottom: 15px;
+        }
+
+        .feature-card h3 {
+            color: #1e3a8a;
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            color: #666;
+            line-height: 1.5;
+        }
+
+        /* Footer */
+        footer {
+            background: #1e3a8a;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+
+            nav {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .hero {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .hero-content {
+                width: 100%;
+            }
+
+            .hero-content h1 {
+                font-size: 36px;
+            }
+
+            .hero-image {
+                width: 100%;
+                margin-top: 30px;
+            }
+
+            .buttons {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav>
+
+        <div class="logo">
+            🚚 CourierTrack
+        </div>
+
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/track-courier">Track Courier</a></li>
+            <li><a href="/book-courier">Book Courier</a></li>
+            <li><a href="/login">Login</a></li>
+            <li><a href="/register">Register</a></li>
+        </ul>
+
+    </nav>
+
+
+    <!-- Hero Section -->
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <h1>
+                Fast & Reliable Courier Tracking
+            </h1>
+
+            <p>
+                Track your courier anytime, anywhere.
+                Our Online Courier Tracking System helps you
+                book shipments, monitor delivery status and
+                manage courier information easily.
+            </p>
+
+            <div class="buttons">
+
+                <a href="/track-courier" class="btn primary">
+                    📦 Track Courier
+                </a>
+
+                <a href="/book-courier" class="btn secondary">
+                    🚀 Book Courier
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="hero-image">
+            🚚📦
+        </div>
+
+    </section>
+
+
+    <!-- Features -->
+    <section class="features">
+
+        <h2>Why Choose CourierTrack?</h2>
+
+        <div class="feature-container">
+
+            <div class="feature-card">
+
+                <div class="icon">📍</div>
+
+                <h3>Easy Tracking</h3>
+
+                <p>
+                    Track your courier using a unique
+                    tracking ID and know its current status.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="icon">⚡</div>
+
+                <h3>Fast Delivery</h3>
+
+                <p>
+                    Monitor your shipment and get
+                    updated delivery information.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="icon">🔒</div>
+
+                <h3>Secure System</h3>
+
+                <p>
+                    Customer and courier information
+                    is securely stored in the database.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Footer -->
+    <footer>
+
+        <p>
+            © 2026 Online Courier Tracking System |
+            All Rights Reserved
+        </p>
+
+    </footer>
+
+</body>
+</html>

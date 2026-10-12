@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Driver Dashboard</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #f4f7fb;
+            color: #333;
+        }
+
+        /* ================= HEADER ================= */
+
+        .header {
+            background: linear-gradient(
+                135deg,
+                #1e3c72,
+                #2a5298
+            );
+
+            color: white;
+            padding: 20px 40px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .header h1 {
+            font-size: 26px;
+        }
+
+        .driver-info {
+            text-align: right;
+        }
+
+        .driver-info strong {
+            font-size: 17px;
+        }
+
+        .driver-info span {
+            display: block;
+            font-size: 13px;
+            margin-top: 5px;
+            opacity: 0.9;
+        }
+
+        .logout-btn {
+            display: inline-block;
+            margin-top: 8px;
+
+            padding: 8px 14px;
+
+            background: #e74c3c;
+            color: white;
+
+            text-decoration: none;
+
+            border-radius: 6px;
+
+            font-size: 13px;
+        }
+
+        .logout-btn:hover {
+            background: #c0392b;
+        }
+
+        /* ================= CONTAINER ================= */
+
+        .container {
+            width: 95%;
+            max-width: 1200px;
+
+            margin: 35px auto;
+        }
+
+        .welcome {
+            margin-bottom: 25px;
+        }
+
+        .welcome h2 {
+            color: #1e3c72;
+            margin-bottom: 8px;
+        }
+
+        .welcome p {
+            color: #666;
+        }
+
+        /* ================= DRIVER CARD ================= */
+
+        .driver-card {
+            background: white;
+
+            padding: 20px;
+
+            border-radius: 12px;
+
+            margin-bottom: 25px;
+
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .driver-card h3 {
+            color: #1e3c72;
+            margin-bottom: 8px;
+        }
+
+        .driver-card p {
+            color: #666;
+            margin: 4px 0;
+        }
+
+        .vehicle {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2a5298;
+        }
+
+        /* ================= COURIER GRID ================= */
+
+        .courier-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(auto-fit, minmax(320px, 1fr));
+
+            gap: 25px;
+        }
+
+        /* ================= COURIER CARD ================= */
+
+        .courier-card {
+            background: white;
+
+            border-radius: 14px;
+
+            padding: 25px;
+
+            box-shadow:
+                0 5px 20px rgba(0,0,0,0.08);
+
+            border-top: 5px solid #2a5298;
+        }
+
+        .courier-card h3 {
+            color: #1e3c72;
+
+            margin-bottom: 18px;
+
+            word-break: break-all;
+        }
+
+        .details {
+            margin-bottom: 18px;
+        }
+
+        .details p {
+            margin: 9px 0;
+
+            line-height: 1.5;
+        }
+
+        .details strong {
+            color: #333;
+        }
+
+        /* ================= STATUS ================= */
+
+        .status-section {
+            margin-top: 20px;
+
+            padding-top: 20px;
+
+            border-top: 1px solid #eee;
+        }
+
+        .status-section label {
+            display: block;
+
+            font-weight: bold;
+
+            margin-bottom: 8px;
+        }
+
+        .status-form {
+            display: flex;
+
+            gap: 8px;
+        }
+
+        .status-form select {
+            flex: 1;
+
+            padding: 10px;
+
+            border: 1px solid #ccc;
+
+            border-radius: 6px;
+
+            background: white;
+        }
+
+        .update-btn {
+            padding: 10px 15px;
+
+            background: #2a5298;
+
+            color: white;
+
+            border: none;
+
+            border-radius: 6px;
+
+            cursor: pointer;
+
+            font-weight: bold;
+        }
+
+        .update-btn:hover {
+            background: #1e3c72;
+        }
+
+        /* ================= GPS BUTTON ================= */
+
+        .gps-btn {
+            display: block;
+
+            width: 100%;
+
+            margin-top: 15px;
+
+            padding: 13px;
+
+            text-align: center;
+
+            background: #27ae60;
+
+            color: white;
+
+            text-decoration: none;
+
+            border-radius: 7px;
+
+            font-weight: bold;
+        }
+
+        .gps-btn:hover {
+            background: #219150;
+        }
+
+        /* ================= NO COURIER ================= */
+
+        .no-courier {
+            background: white;
+
+            padding: 40px;
+
+            text-align: center;
+
+            border-radius: 12px;
+
+            box-shadow:
+                0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .no-courier .icon {
+            font-size: 50px;
+
+            margin-bottom: 15px;
+        }
+
+        .no-courier h3 {
+            color: #555;
+
+            margin-bottom: 8px;
+        }
+
+        .no-courier p {
+            color: #888;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 700px) {
+
+            .header {
+                padding: 18px;
+
+                flex-direction: column;
+
+                gap: 15px;
+
+                text-align: center;
+            }
+
+            .driver-info {
+                text-align: center;
+            }
+
+            .driver-card {
+                flex-direction: column;
+
+                align-items: flex-start;
+
+                gap: 15px;
+            }
+
+            .status-form {
+                flex-direction: column;
+            }
+
+            .update-btn {
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header class="header">
+
+    <div>
+
+        <h1>
+            🚚 Driver Dashboard
+        </h1>
+
+    </div>
+
+
+    <div class="driver-info">
+
+        <strong>
+            {{ driver["name"] }}
+        </strong>
+
+        <span>
+            📧 {{ driver["email"] }}
+        </span>
+
+        <span>
+            🚗 {{ driver["vehicle_number"] }}
+        </span>
+
+        <a
+            href="{{ url_for('driver_logout') }}"
+            class="logout-btn"
+        >
+            Logout
+        </a>
+
+    </div>
+
+</header>
+
+
+<!-- =====================================================
+     MAIN CONTAINER
+===================================================== -->
+
+<div class="container">
+
+
+    <!-- WELCOME -->
+
+    <div class="welcome">
+
+        <h2>
+            Welcome, {{ driver["name"] }} 👋
+        </h2>
+
+        <p>
+            Here you can manage your assigned courier deliveries
+            and update their live location.
+        </p>
+
+    </div>
+
+
+    <!-- =================================================
+         DRIVER INFORMATION
+    ================================================= -->
+
+    <div class="driver-card">
+
+        <div>
+
+            <h3>
+                👤 Driver Information
+            </h3>
+
+            <p>
+                <strong>Name:</strong>
+                {{ driver["name"] }}
+            </p>
+
+            <p>
+                <strong>Phone:</strong>
+                {{ driver["phone"] }}
+            </p>
+
+            <p>
+                <strong>Email:</strong>
+                {{ driver["email"] }}
+            </p>
+
+        </div>
+
+
+        <div>
+
+            <p>
+                <strong>Vehicle Number</strong>
+            </p>
+
+            <div class="vehicle">
+
+                🚗 {{ driver["vehicle_number"] }}
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         ASSIGNED COURIERS
+    ================================================= -->
+
+    {% if couriers %}
+
+        <h2 style="margin-bottom: 20px; color: #1e3c72;">
+
+            📦 My Assigned Couriers
+
+        </h2>
+
+
+        <div class="courier-grid">
+
+
+            {% for courier in couriers %}
+
+
+                <div class="courier-card">
+
+
+                    <!-- TRACKING ID -->
+
+                    <h3>
+
+                        📦
+                        {{ courier["tracking_id"] }}
+
+                    </h3>
+
+
+                    <!-- COURIER DETAILS -->
+
+                    <div class="details">
+
+                        <p>
+
+                            <strong>
+                                Sender:
+                            </strong>
+
+                            {{ courier["sender_name"] }}
+
+                        </p>
+
+
+                        <p>
+
+                            <strong>
+                                Sender Phone:
+                            </strong>
+
+                            {{ courier["sender_phone"] }}
+
+                        </p>
+
+
+                        <p>
+
+                            <strong>
+                                Receiver:
+                            </strong>
+
+                            {{ courier["receiver_name"] }}
+
+                        </p>
+
+
+                        <p>
+
+                            <strong>
+                                Receiver Phone:
+                            </strong>
+
+                            {{ courier["receiver_phone"] }}
+
+                        </p>
+
+
+                        <p>
+
+                            <strong>
+                                Pickup Address:
+                            </strong>
+
+                            {{ courier["pickup_address"] }}
+
+                        </p>
+
+
+                        <p>
+
+                            <strong>
+                                Delivery Address:
+                            </strong>
+
+                            {{ courier["delivery_address"] }}
+
+                        </p>
+
+
+                        <p>
+
+                            <strong>
+                                Package:
+                            </strong>
+
+                            {{ courier["package_type"] }}
+
+                        </p>
+
+
+                        <p>
+
+                            <strong>
+                                Weight:
+                            </strong>
+
+                            {{ courier["weight"] }} kg
+
+                        </p>
+
+
+                        <p>
+
+                            <strong>
+                                Current Status:
+                            </strong>
+
+                            {{ courier["status"] }}
+
+                        </p>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         UPDATE STATUS
+                    ================================================= -->
+
+                    <div class="status-section">
+
+                        <label>
+                            Update Courier Status
+                        </label>
+
+
+                        <form
+                            action="{{ url_for('driver_update_status') }}"
+                            method="POST"
+                            class="status-form"
+                        >
+
+                            <input
+                                type="hidden"
+                                name="tracking_id"
+                                value="{{ courier['tracking_id'] }}"
+                            >
+
+
+                            <select name="status" required>
+
+                                <option
+                                    value="Booked"
+                                    {% if courier["status"] == "Booked" %}
+                                        selected
+                                    {% endif %}
+                                >
+                                    Booked
+                                </option>
+
+
+                                <option
+                                    value="Picked Up"
+                                    {% if courier["status"] == "Picked Up" %}
+                                        selected
+                                    {% endif %}
+                                >
+                                    Picked Up
+                                </option>
+
+
+                                <option
+                                    value="In Transit"
+                                    {% if courier["status"] == "In Transit" %}
+                                        selected
+                                    {% endif %}
+                                >
+                                    In Transit
+                                </option>
+
+
+                                <option
+                                    value="Out for Delivery"
+                                    {% if courier["status"] == "Out for Delivery" %}
+                                        selected
+                                    {% endif %}
+                                >
+                                    Out for Delivery
+                                </option>
+
+
+                                <option
+                                    value="Delivered"
+                                    {% if courier["status"] == "Delivered" %}
+                                        selected
+                                    {% endif %}
+                                >
+                                    Delivered
+                                </option>
+
+                            </select>
+
+
+                            <button
+                                type="submit"
+                                class="update-btn"
+                            >
+                                Update
+                            </button>
+
+                        </form>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         LIVE GPS
+                    ================================================= -->
+
+                    <a
+                        href="{{ url_for(
+                            'driver_tracking',
+                            tracking_id=courier['tracking_id']
+                        ) }}"
+                        class="gps-btn"
+                    >
+
+                        📍 Start Live GPS Tracking
+
+                    </a>
+
+
+                </div>
+
+
+            {% endfor %}
+
+
+        </div>
+
+
+    {% else %}
+
+
+        <!-- NO ASSIGNED COURIERS -->
+
+        <div class="no-courier">
+
+            <div class="icon">
+                📦
+            </div>
+
+            <h3>
+                No Couriers Assigned
+            </h3>
+
+            <p>
+                You currently don't have any assigned
+                courier deliveries.
+            </p>
+
+        </div>
+
+
+    {% endif %}
+
+
+</div>
+
+
+</body>
+
+</html>

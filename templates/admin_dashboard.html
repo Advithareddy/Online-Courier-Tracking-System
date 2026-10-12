@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f6f9;
+            min-height: 100vh;
+        }
+
+        /* ================= HEADER ================= */
+
+        .header {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 25px;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .header-btn {
+            background: white;
+            color: #1e3c72;
+            text-decoration: none;
+            padding: 10px 18px;
+            border-radius: 7px;
+            font-weight: bold;
+        }
+
+        .header-btn:hover {
+            background: #eeeeee;
+        }
+
+        /* ================= CONTAINER ================= */
+
+        .container {
+            width: 95%;
+            max-width: 1500px;
+            margin: 30px auto;
+        }
+
+        .welcome {
+            margin-bottom: 25px;
+        }
+
+        .welcome h2 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .welcome p {
+            color: #777;
+        }
+
+        /* ================= STATISTICS ================= */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .card h3 {
+            color: #777;
+            font-size: 15px;
+            margin-bottom: 10px;
+        }
+
+        .card .number {
+            font-size: 30px;
+            font-weight: bold;
+            color: #2a5298;
+        }
+
+        /* ================= COMMON TABLE ================= */
+
+        .table-container {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            overflow-x: auto;
+            margin-bottom: 30px;
+        }
+
+        .table-header {
+            margin-bottom: 20px;
+        }
+
+        .table-header h2 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .table-header p {
+            color: #777;
+            font-size: 14px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 900px;
+        }
+
+        th {
+            background: #2a5298;
+            color: white;
+            padding: 14px;
+            text-align: left;
+        }
+
+        td {
+            padding: 14px;
+            border-bottom: 1px solid #eeeeee;
+            vertical-align: middle;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        /* ================= DRIVER EDIT ================= */
+
+        .edit-btn {
+            display: inline-block;
+            background: #f39c12;
+            color: white;
+            text-decoration: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .edit-btn:hover {
+            background: #d68910;
+        }
+
+        /* ================= TRACKING ID ================= */
+
+        .tracking-id {
+            display: inline-block;
+            color: #2563eb;
+            font-weight: bold;
+            text-decoration: underline;
+            cursor: pointer;
+            padding: 5px 8px;
+            border-radius: 5px;
+        }
+
+        .tracking-id:hover {
+            color: #1e3c72;
+            background: #eaf2ff;
+        }
+
+        /* ================= STATUS ================= */
+
+        .status {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .booked {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .picked {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .transit {
+            background: #cce5ff;
+            color: #004085;
+        }
+
+        .delivery {
+            background: #e2d9f3;
+            color: #563d7c;
+        }
+
+        .delivered {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        /* ================= UPDATE FORM ================= */
+
+        .update-form {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        select {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+        }
+
+        .update-btn {
+            background: #2a5298;
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .update-btn:hover {
+            background: #1e3c72;
+        }
+
+        /* ================= GPS ================= */
+
+        .gps-form {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+            min-width: 210px;
+        }
+
+        .gps-input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .gps-input:focus {
+            outline: none;
+            border-color: #2a5298;
+        }
+
+        .gps-btn {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 9px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .gps-btn:hover {
+            background: #219150;
+        }
+
+        .gps-status {
+            margin-top: 7px;
+            font-size: 12px;
+            color: #777;
+            line-height: 1.5;
+        }
+
+        .map-btn {
+            display: inline-block;
+            margin-top: 6px;
+            padding: 6px 10px;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+
+        .map-btn:hover {
+            background: #2980b9;
+        }
+
+        /* ================= EMPTY ================= */
+
+        .empty {
+            text-align: center;
+            padding: 40px;
+            color: #777;
+        }
+
+        .empty-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 1000px) {
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                padding: 20px;
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .header-buttons {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .container {
+                width: 92%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ================= HEADER ================= -->
+
+    <div class="header">
+
+        <h1>
+            📦 Courier Admin Dashboard
+        </h1>
+
+        <div class="header-buttons">
+
+            <a href="{{ url_for('add_driver') }}" class="header-btn">
+                ➕ Add Driver
+            </a>
+
+            <a href="{{ url_for('admin_logout') }}" class="header-btn">
+                Logout
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= MAIN CONTAINER ================= -->
+
+    <div class="container">
+
+        <!-- ================= WELCOME ================= -->
+
+        <div class="welcome">
+
+            <h2>
+                Welcome, Admin 👋
+            </h2>
+
+            <p>
+                Manage courier bookings, drivers, delivery status and GPS location.
+            </p>
+
+        </div>
+
+
+        <!-- ================= STATISTICS ================= -->
+
+        <div class="stats">
+
+            <div class="card">
+
+                <h3>
+                    📦 Total Couriers
+                </h3>
+
+                <div class="number">
+                    {{ couriers|length }}
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>
+                    📝 Booked
+                </h3>
+
+                <div class="number">
+                    {{
+                        couriers
+                        |selectattr("status", "equalto", "Booked")
+                        |list
+                        |length
+                    }}
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>
+                    🚚 In Transit
+                </h3>
+
+                <div class="number">
+                    {{
+                        couriers
+                        |selectattr("status", "equalto", "In Transit")
+                        |list
+                        |length
+                    }}
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>
+                    ✅ Delivered
+                </h3>
+
+                <div class="number">
+                    {{
+                        couriers
+                        |selectattr("status", "equalto", "Delivered")
+                        |list
+                        |length
+                    }}
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- DRIVERS LIST -->
+        <!-- ================================================= -->
+
+        <div class="table-container">
+
+            <div class="table-header">
+
+                <h2>
+                    🚚 Drivers List
+                </h2>
+
+                <p>
+                    Manage all registered delivery drivers.
+                </p>
+
+            </div>
+
+
+            {% if drivers %}
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Driver ID</th>
+                        <th>Driver Name</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Vehicle Number</th>
+                        <th>Action</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for driver in drivers %}
+
+                    <tr>
+
+                        <td>
+                            {{ driver["id"] }}
+                        </td>
+
+                        <td>
+                            <strong>
+                                {{ driver["name"] }}
+                            </strong>
+                        </td>
+
+                        <td>
+                            {{ driver["phone"] }}
+                        </td>
+
+                        <td>
+                            {{ driver["email"] }}
+                        </td>
+
+                        <td>
+                            🚚 {{ driver["vehicle_number"] }}
+                        </td>
+
+                        <td>
+
+                            <a
+                                href="{{ url_for('edit_driver', driver_id=driver['id']) }}"
+                                class="edit-btn"
+                            >
+                                ✏️ Edit
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+            {% else %}
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    🚚
+                </div>
+
+                <h3>
+                    No Drivers Added
+                </h3>
+
+                <p>
+                    Click "Add Driver" to register a delivery driver.
+                </p>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- ALL COURIER BOOKINGS -->
+        <!-- ================================================= -->
+
+        <div class="table-container">
+
+            <div class="table-header">
+
+                <h2>
+                    📋 All Courier Bookings
+                </h2>
+
+                <p>
+                    View and manage all courier deliveries.
+                </p>
+
+            </div>
+
+
+            {% if couriers %}
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>Tracking ID</th>
+                        <th>Sender</th>
+                        <th>Receiver</th>
+                        <th>Package</th>
+                        <th>Weight</th>
+                        <th>Status</th>
+                        <th>Driver</th>
+                        <th>Update Status</th>
+                        <th>📍 GPS Location</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                {% for courier in couriers %}
+
+                    <tr>
+
+                        <!-- TRACKING ID -->
+
+                        <td>
+
+                            <a
+                                href="{{ url_for('courier_details', tracking_id=courier['tracking_id']) }}"
+                                class="tracking-id"
+                            >
+                                {{ courier["tracking_id"] }}
+                            </a>
+
+                        </td>
+
+
+                        <!-- SENDER -->
+
+                        <td>
+                            {{ courier["sender_name"] }}
+                        </td>
+
+
+                        <!-- RECEIVER -->
+
+                        <td>
+                            {{ courier["receiver_name"] }}
+                        </td>
+
+
+                        <!-- PACKAGE -->
+
+                        <td>
+                            {{ courier["package_type"] }}
+                        </td>
+
+
+                        <!-- WEIGHT -->
+
+                        <td>
+                            {{ courier["weight"] }}
+                        </td>
+
+
+                        <!-- STATUS -->
+
+                        <td>
+
+                            {% if courier["status"] == "Booked" %}
+
+                                <span class="status booked">
+                                    📝 Booked
+                                </span>
+
+                            {% elif courier["status"] == "Picked Up" %}
+
+                                <span class="status picked">
+                                    📦 Picked Up
+                                </span>
+
+                            {% elif courier["status"] == "In Transit" %}
+
+                                <span class="status transit">
+                                    🚚 In Transit
+                                </span>
+
+                            {% elif courier["status"] == "Out for Delivery" %}
+
+                                <span class="status delivery">
+                                    🛵 Out for Delivery
+                                </span>
+
+                            {% elif courier["status"] == "Delivered" %}
+
+                                <span class="status delivered">
+                                    ✅ Delivered
+                                </span>
+
+                            {% else %}
+
+                                <span class="status">
+                                    {{ courier["status"] }}
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+<!-- ================= ASSIGN DRIVER ================= -->
+
+<td>
+
+    <form
+        action="{{ url_for('assign_driver') }}"
+        method="POST"
+        class="update-form"
+    >
+
+        <input
+            type="hidden"
+            name="tracking_id"
+            value="{{ courier['tracking_id'] }}"
+        >
+
+        <select name="driver_id" required>
+
+            <option value="">
+                Select Driver
+            </option>
+
+            {% for driver in drivers %}
+
+                <option
+                    value="{{ driver['id'] }}"
+                    {% if courier['driver_id'] == driver['id'] %}
+                        selected
+                    {% endif %}
+                >
+                    {{ driver['name'] }}
+                    - {{ driver['vehicle_number'] }}
+                </option>
+
+            {% endfor %}
+
+        </select>
+
+        <button
+            type="submit"
+            class="update-btn"
+        >
+            Assign
+        </button>
+
+    </form>
+
+
+    {% if courier["driver_name"] %}
+
+        <div class="gps-status">
+
+            🚚 Driver:
+            <strong>
+                {{ courier["driver_name"] }}
+            </strong>
+
+            <br>
+
+            🚗 Vehicle:
+            {{ courier["driver_vehicle"] }}
+
+        </div>
+
+    {% else %}
+
+        <div class="gps-status">
+            ⚠️ No driver assigned
+        </div>
+
+    {% endif %}
+
+</td>
+
+                        <!-- UPDATE STATUS -->
+
+                        <td>
+
+                            <form
+                                action="{{ url_for('update_status') }}"
+                                method="POST"
+                                class="update-form"
+                            >
+
+                                <input
+                                    type="hidden"
+                                    name="tracking_id"
+                                    value="{{ courier['tracking_id'] }}"
+                                >
+
+                                <select name="status">
+
+                                    <option
+                                        value="Booked"
+                                        {% if courier["status"] == "Booked" %}selected{% endif %}
+                                    >
+                                        Booked
+                                    </option>
+
+                                    <option
+                                        value="Picked Up"
+                                        {% if courier["status"] == "Picked Up" %}selected{% endif %}
+                                    >
+                                        Picked Up
+                                    </option>
+
+                                    <option
+                                        value="In Transit"
+                                        {% if courier["status"] == "In Transit" %}selected{% endif %}
+                                    >
+                                        In Transit
+                                    </option>
+
+                                    <option
+                                        value="Out for Delivery"
+                                        {% if courier["status"] == "Out for Delivery" %}selected{% endif %}
+                                    >
+                                        Out for Delivery
+                                    </option>
+
+                                    <option
+                                        value="Delivered"
+                                        {% if courier["status"] == "Delivered" %}selected{% endif %}
+                                    >
+                                        Delivered
+                                    </option>
+
+                                </select>
+
+
+                                <button
+                                    type="submit"
+                                    class="update-btn"
+                                >
+                                    Update
+                                </button>
+
+                            </form>
+
+                        </td>
+
+
+                        <!-- GPS LOCATION -->
+
+                        <td>
+
+                            <form
+                                action="{{ url_for('update_location') }}"
+                                method="POST"
+                                class="gps-form"
+                            >
+
+                                <input
+                                    type="hidden"
+                                    name="tracking_id"
+                                    value="{{ courier['tracking_id'] }}"
+                                >
+
+                                <input
+                                    type="number"
+                                    name="latitude"
+                                    class="gps-input"
+                                    placeholder="Latitude"
+                                    step="any"
+                                    required
+                                >
+
+                                <input
+                                    type="number"
+                                    name="longitude"
+                                    class="gps-input"
+                                    placeholder="Longitude"
+                                    step="any"
+                                    required
+                                >
+
+                                <button
+                                    type="submit"
+                                    class="gps-btn"
+                                >
+                                    📍 Update GPS
+                                </button>
+
+                            </form>
+
+
+                            {% if courier["latitude"] is not none and courier["longitude"] is not none %}
+
+                                <div class="gps-status">
+
+                                    📍 Current Location:
+                                    <br>
+
+                                    {{ courier["latitude"] }},
+                                    {{ courier["longitude"] }}
+
+                                </div>
+
+
+                                <a
+                                    href="https://www.google.com/maps?q={{ courier['latitude'] }},{{ courier['longitude'] }}"
+                                    target="_blank"
+                                    class="map-btn"
+                                >
+                                    🗺️ View on Map
+                                </a>
+
+                            {% else %}
+
+                                <div class="gps-status">
+                                    📍 No location available
+                                </div>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+            {% else %}
+
+                <div class="empty">
+
+                    <div class="empty-icon">
+                        📦
+                    </div>
+
+                    <h3>
+                        No Courier Bookings
+                    </h3>
+
+                    <p>
+                        There are currently no courier bookings.
+                    </p>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

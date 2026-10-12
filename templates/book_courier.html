@@ -1,0 +1,183 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Book Courier - CourierTrack</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <nav>
+
+        <div class="logo">
+            🚚 CourierTrack
+        </div>
+
+        <ul>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/track-courier">Track Courier</a></li>
+            <li><a href="/logout">Logout</a></li>
+        </ul>
+
+    </nav>
+
+
+    <div class="booking-container">
+
+        <div class="booking-box">
+
+            <h1>📦 Book a Courier</h1>
+
+            <p class="subtitle">
+                Enter the shipment details below
+            </p>
+
+
+            {% if error %}
+                <div class="error-message">
+                    {{ error }}
+                </div>
+            {% endif %}
+
+
+            <form method="POST" action="/book-courier">
+
+                <h2>Sender Details</h2>
+
+                <label>Sender Name</label>
+
+                <input
+                    type="text"
+                    name="sender_name"
+                    placeholder="Enter sender name"
+                    required
+                >
+
+
+                <label>Sender Phone</label>
+
+                <input
+                    type="tel"
+                    name="sender_phone"
+                    placeholder="Enter sender phone"
+                    required
+                >
+
+
+                <label>Pickup Address</label>
+
+                <textarea
+                    name="pickup_address"
+                    placeholder="Enter pickup address"
+                    required
+                ></textarea>
+
+
+                <h2>Receiver Details</h2>
+
+                <label>Receiver Name</label>
+
+                <input
+                    type="text"
+                    name="receiver_name"
+                    placeholder="Enter receiver name"
+                    required
+                >
+
+
+                <label>Receiver Phone</label>
+
+                <input
+                    type="tel"
+                    name="receiver_phone"
+                    placeholder="Enter receiver phone"
+                    required
+                >
+
+
+                <label>Delivery Address</label>
+
+                <textarea
+                    name="delivery_address"
+                    placeholder="Enter delivery address"
+                    required
+                ></textarea>
+
+
+                <h2>Package Details</h2>
+
+                <label>Package Type</label>
+
+                <select name="package_type" required>
+
+                    <option value="">
+                        Select Package Type
+                    </option>
+
+                    <option value="Document">
+                        Document
+                    </option>
+
+                    <option value="Parcel">
+                        Parcel
+                    </option>
+
+                    <option value="Electronics">
+                        Electronics
+                    </option>
+
+                    <option value="Clothing">
+                        Clothing
+                    </option>
+
+                    <option value="Other">
+                        Other
+                    </option>
+
+                </select>
+
+
+                <label>Weight (kg)</label>
+
+                <input
+                    type="number"
+                    name="weight"
+                    step="0.1"
+                    min="0.1"
+                    placeholder="Enter package weight"
+                    required
+                >
+
+
+                <button type="submit">
+                    🚀 Book Courier
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <footer>
+
+        <p>
+            © 2026 Online Courier Tracking System
+        </p>
+
+    </footer>
+
+</body>
+
+</html>
+```

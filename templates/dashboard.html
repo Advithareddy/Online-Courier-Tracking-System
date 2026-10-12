@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard - CourierTrack</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+    <nav>
+
+        <div class="logo">
+            🚚 CourierTrack
+        </div>
+
+        <ul>
+
+            <li>
+                <a href="/">Home</a>
+            </li>
+
+            <li>
+                <a href="/book-courier">Book Courier</a>
+            </li>
+
+            <li>
+                <a href="/track-courier">Track Courier</a>
+            </li>
+
+            <li>
+                <a href="/logout">Logout</a>
+            </li>
+
+        </ul>
+
+    </nav>
+
+
+    <div class="dashboard">
+
+        <h1>
+            Welcome, {{ session["user_name"] }}! 👋
+        </h1>
+
+        <p>
+            Manage your courier shipments from your dashboard.
+        </p>
+
+
+        <div class="dashboard-cards">
+
+            <div class="dashboard-card">
+
+                <div class="dashboard-icon">
+                    📦
+                </div>
+
+                <h2>
+                    Book Courier
+                </h2>
+
+                <p>
+                    Send a new package to your desired destination.
+                </p>
+
+                <a href="/book-courier">
+                    Book Now →
+                </a>
+
+            </div>
+
+
+            <div class="dashboard-card">
+
+                <div class="dashboard-icon">
+                    📍
+                </div>
+
+                <h2>
+                    Track Courier
+                </h2>
+
+                <p>
+                    Check the current status of your shipment.
+                </p>
+
+                <a href="/track-courier">
+                    Track Now →
+                </a>
+
+            </div>
+
+
+            <div class="dashboard-card">
+
+                <div class="dashboard-icon">
+                    📋
+                </div>
+
+                <h2>
+                    Courier Details
+                </h2>
+
+                <p>
+                    View your courier shipment information.
+                </p>
+
+                <a href="/courier-details">
+                    View Details →
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <footer>
+
+        <p>
+            © 2026 Online Courier Tracking System
+        </p>
+
+    </footer>
+
+</body>
+</html>

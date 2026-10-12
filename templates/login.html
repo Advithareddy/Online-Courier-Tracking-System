@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login - CourierTrack</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <nav>
+        <div class="logo">🚚 CourierTrack</div>
+
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/track-courier">Track Courier</a></li>
+            <li><a href="/register">Register</a></li>
+        </ul>
+    </nav>
+
+
+    <div class="form-container">
+
+        <div class="form-box">
+
+            <h1>Welcome Back</h1>
+
+            <p class="subtitle">
+                Login to your CourierTrack account
+            </p>
+
+            {% if error %}
+                <div class="error-message">
+                    {{ error }}
+                </div>
+            {% endif %}
+
+
+            <form method="POST" action="/login">
+
+                <label>Email Address</label>
+
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="Enter your email"
+                    required
+                >
+
+
+                <label>Password</label>
+
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    required
+                >
+
+
+                <button type="submit">
+                    Login
+                </button>
+
+            </form>
+
+
+            <p class="bottom-text">
+                Don't have an account?
+                <a href="/register">Register here</a>
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <footer>
+        <p>© 2026 Online Courier Tracking System</p>
+    </footer>
+
+</body>
+</html>

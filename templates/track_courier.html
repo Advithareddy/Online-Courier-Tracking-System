@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Track Courier</title>
+
+    <!-- Leaflet CSS -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 40px 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 850px;
+            margin: auto;
+        }
+
+        .tracking-box {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            margin-bottom: 10px;
+            color: #333;
+            text-align: center;
+        }
+
+        .subtitle {
+            color: #777;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #444;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 8px;
+            background: #667eea;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #5568d9;
+        }
+
+        .error {
+            margin-top: 20px;
+            padding: 12px;
+            background: #ffe5e5;
+            color: #d63031;
+            border-radius: 8px;
+        }
+
+        .result {
+            margin-top: 30px;
+            background: #f8f9ff;
+            padding: 25px;
+            border-radius: 12px;
+        }
+
+        .result h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .detail {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #ddd;
+            gap: 20px;
+        }
+
+        .detail:last-child {
+            border-bottom: none;
+        }
+
+        .label {
+            font-weight: bold;
+            color: #555;
+        }
+
+        .value {
+            color: #333;
+            text-align: right;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 8px 15px;
+            border-radius: 20px;
+            background: #667eea;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* MAP */
+
+        .map-section {
+            margin-top: 30px;
+        }
+
+        .map-section h2 {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        #map {
+            width: 100%;
+            height: 400px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid #ddd;
+        }
+
+        .gps-info {
+            margin-top: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .gps-info p {
+            margin: 6px 0;
+            color: #555;
+        }
+
+        .gps-active {
+            color: #27ae60 !important;
+            font-weight: bold;
+        }
+
+        .gps-not-available {
+            color: #e67e22 !important;
+            font-weight: bold;
+        }
+
+        .last-update {
+            color: #667eea !important;
+            font-weight: bold;
+        }
+
+        .back {
+            display: block;
+            margin-top: 25px;
+            text-decoration: none;
+            color: #667eea;
+            text-align: center;
+        }
+
+        .back:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+
+            .tracking-box {
+                padding: 25px;
+            }
+
+            .detail {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .value {
+                text-align: left;
+            }
+
+            #map {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="tracking-box">
+
+        <h1>📦 Track Your Courier</h1>
+
+        <p class="subtitle">
+            Enter your tracking ID to check your courier status and live location.
+        </p>
+
+        <!-- TRACKING FORM -->
+
+        <form action="{{ url_for('track_courier') }}" method="POST">
+
+            <label for="tracking_id">
+                Tracking ID
+            </label>
+
+            <input
+                type="text"
+                id="tracking_id"
+                name="tracking_id"
+                placeholder="Example: CT8A21F4BC"
+                value="{{ courier['tracking_id'] if courier else '' }}"
+                required
+            >
+
+            <button type="submit">
+                🔍 Track Courier
+            </button>
+
+        </form>
+
+
+        <!-- ERROR -->
+
+        {% if error %}
+
+        <div class="error">
+            ❌ {{ error }}
+        </div>
+
+        {% endif %}
+
+
+        <!-- COURIER DETAILS -->
+
+        {% if courier %}
+
+        <div class="result">
+
+            <h2>Courier Details</h2>
+
+            <div class="detail">
+                <span class="label">Tracking ID</span>
+
+                <span class="value">
+                    {{ courier["tracking_id"] }}
+                </span>
+            </div>
+
+            <div class="detail">
+                <span class="label">Sender</span>
+
+                <span class="value">
+                    {{ courier["sender_name"] }}
+                </span>
+            </div>
+
+            <div class="detail">
+                <span class="label">Sender Phone</span>
+
+                <span class="value">
+                    {{ courier["sender_phone"] }}
+                </span>
+            </div>
+
+            <div class="detail">
+                <span class="label">Receiver</span>
+
+                <span class="value">
+                    {{ courier["receiver_name"] }}
+                </span>
+            </div>
+
+            <div class="detail">
+                <span class="label">Receiver Phone</span>
+
+                <span class="value">
+                    {{ courier["receiver_phone"] }}
+                </span>
+            </div>
+
+            <div class="detail">
+                <span class="label">Pickup Address</span>
+
+                <span class="value">
+                    {{ courier["pickup_address"] }}
+                </span>
+            </div>
+
+            <div class="detail">
+                <span class="label">Delivery Address</span>
+
+                <span class="value">
+                    {{ courier["delivery_address"] }}
+                </span>
+            </div>
+
+            <div class="detail">
+                <span class="label">Package Type</span>
+
+                <span class="value">
+                    {{ courier["package_type"] }}
+                </span>
+            </div>
+
+            <div class="detail">
+                <span class="label">Weight</span>
+
+                <span class="value">
+                    {{ courier["weight"] }}
+                </span>
+            </div>
+
+            <div class="detail">
+
+                <span class="label">
+                    Current Status
+                </span>
+
+                <span class="status" id="courierStatus">
+                    {{ courier["status"] }}
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- LIVE GPS MAP -->
+
+        <div class="map-section">
+
+            <h2>📍 Live Courier Location</h2>
+
+            <div id="map"></div>
+
+            <div class="gps-info">
+
+                <p id="gpsStatus" class="gps-not-available">
+                    🟠 Checking courier location...
+                </p>
+
+                <p>
+                    Latitude:
+                    <strong id="latitude">--</strong>
+                </p>
+
+                <p>
+                    Longitude:
+                    <strong id="longitude">--</strong>
+                </p>
+
+                <p class="last-update">
+                    Last Updated:
+                    <strong id="lastUpdated">--</strong>
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- LEAFLET -->
+
+        <script
+            src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+        </script>
+
+
+        <script>
+
+            // Tracking ID from Flask
+            const trackingId =
+                {{ courier["tracking_id"] | tojson }};
+
+
+            // Initial coordinates from database
+            const initialLatitude =
+                {{ courier["latitude"] if courier["latitude"] is not none else 17.3850 }};
+
+            const initialLongitude =
+                {{ courier["longitude"] if courier["longitude"] is not none else 78.4867 }};
+
+
+            // Create map
+            const map = L.map("map").setView(
+                [initialLatitude, initialLongitude],
+                13
+            );
+
+
+            // OpenStreetMap
+            L.tileLayer(
+                "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+                    maxZoom: 19,
+                    attribution:
+                        "&copy; OpenStreetMap contributors"
+                }
+            ).addTo(map);
+
+
+            // Create courier marker
+            let marker = L.marker(
+                [initialLatitude, initialLongitude]
+            ).addTo(map);
+
+
+            marker.bindPopup(
+                "<b>📦 Courier Location</b><br>" +
+                "Tracking ID: " + trackingId
+            );
+
+
+            // Update map with new coordinates
+            function updateMap(latitude, longitude) {
+
+                const newPosition = [
+                    latitude,
+                    longitude
+                ];
+
+
+                // Move marker
+                marker.setLatLng(newPosition);
+
+
+                // Move map
+                map.setView(
+                    newPosition,
+                    15
+                );
+
+
+                // Update displayed coordinates
+                document.getElementById("latitude").innerText =
+                    latitude.toFixed(6);
+
+                document.getElementById("longitude").innerText =
+                    longitude.toFixed(6);
+
+
+                // Update GPS status
+                document.getElementById("gpsStatus").innerText =
+                    "🟢 Live GPS Location";
+
+                document.getElementById("gpsStatus").className =
+                    "gps-active";
+
+
+                // Update time
+                document.getElementById("lastUpdated").innerText =
+                    new Date().toLocaleTimeString();
+            }
+
+
+            // Get latest location from Flask
+            function getLatestLocation() {
+
+                fetch(
+                    "/get-location?tracking_id=" +
+                    encodeURIComponent(trackingId)
+                )
+
+                .then(response => {
+
+                    if (!response.ok) {
+                        throw new Error("Server error");
+                    }
+
+                    return response.json();
+
+                })
+
+                .then(data => {
+
+                    if (
+                        data.success &&
+                        data.latitude !== null &&
+                        data.longitude !== null
+                    ) {
+
+                        updateMap(
+                            parseFloat(data.latitude),
+                            parseFloat(data.longitude)
+                        );
+
+                    } else {
+
+                        document.getElementById("gpsStatus").innerText =
+                            "🟠 GPS location not available yet.";
+
+                        document.getElementById("gpsStatus").className =
+                            "gps-not-available";
+                    }
+
+                })
+
+                .catch(error => {
+
+                    console.error(
+                        "Error getting location:",
+                        error
+                    );
+
+                    document.getElementById("gpsStatus").innerText =
+                        "🔴 Unable to get live location.";
+
+                    document.getElementById("gpsStatus").className =
+                        "gps-not-available";
+                });
+            }
+
+
+            // Get location immediately
+            getLatestLocation();
+
+
+            // Check for new location every 5 seconds
+            setInterval(
+                getLatestLocation,
+                5000
+            );
+
+        </script>
+
+        {% endif %}
+
+
+        <a
+            href="{{ url_for('dashboard') }}"
+            class="back"
+        >
+            ← Back to Dashboard
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>
