@@ -29,6 +29,20 @@ The application provides a convenient way for users to book couriers and track t
 - Manage courier tracking information
 - View latitude and longitude when available
 - Open courier coordinates on Google Maps
+### 🚚 Driver Dashboard
+
+The Driver Dashboard helps delivery personnel manage assigned courier deliveries and update delivery progress.
+
+- Driver dashboard to view assigned courier deliveries
+- View courier tracking IDs and shipment details
+- Access pickup and delivery addresses
+- Update delivery status as the shipment progresses
+- Share current GPS location when location access is enabled
+- View latitude and longitude coordinates
+- Open the current location in Google Maps
+- Track delivery progress from pickup to final destination
+
+**Note:** Driver dashboard features depend on the functionality implemented in the application. Live GPS tracking requires the driver's device to share location data with the system.
 
 ### 📍 GPS Tracking
 - Browser-based GPS location access
