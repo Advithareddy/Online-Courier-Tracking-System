@@ -1,7 +1,15 @@
 import sqlite3
 import os
 
-DATABASE = "database/courier.db"
+# Use Render's persistent disk when configured.
+# Otherwise, use the local project database.
+DATABASE = os.environ.get(
+    "DATABASE_PATH",
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), "database", "courier.db")
+)
+
+# Ensure the database directory exists.
+os.makedirs(os.path.dirname(DATABASE), exist_ok=True)
 
 
 def get_connection():
